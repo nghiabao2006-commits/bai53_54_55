@@ -235,9 +235,10 @@ public class PhieuDatPhongDAL
 
     public decimal GetServiceTotal(int maPhieu)
     {
-        const string sql = @"SELECT ISNULL(SUM(CAST(SoLuong AS DECIMAL(18,2)) * DonGia), 0)
-                             FROM dbo.SuDungDichVu
-                             WHERE MaPhieu = @MaPhieu";
+        const string sql = @"SELECT ISNULL(SUM(CAST(sddv.SoLuong AS DECIMAL(18,2)) * dv.DonGia), 0)
+                             FROM dbo.SuDungDichVu AS sddv
+                             INNER JOIN dbo.DichVu AS dv ON dv.MaDV = sddv.MaDV
+                             WHERE sddv.MaPhieu = @MaPhieu";
 
         using var connection = DbHelper.OpenConnection();
         using var command = new SqlCommand(sql, connection);
