@@ -1,13 +1,19 @@
-using System.Configuration;
 using System.Data.SqlClient;
 
 namespace CafePOS.DAL;
 
 internal static class DbHelper
 {
+    private static string? _connectionString;
+
     public static string ConnectionString =>
-        ConfigurationManager.ConnectionStrings["CafePOSDB"]?.ConnectionString
-        ?? throw new InvalidOperationException("Chưa cấu hình connectionString CafePOSDB trong App.config.");
+        _connectionString
+        ?? throw new InvalidOperationException("Chưa khởi tạo kết nối cơ sở dữ liệu.");
+
+    public static void Initialize()
+    {
+        _connectionString = DatabaseInitializer.ResolveConnectionString("CafePOSDB");
+    }
 
     public static SqlConnection OpenConnection()
     {
